@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Ratio Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        input[type="number"],
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .output {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Screen Ratio Calculator</h1>
+        <label for="width">Width:</label>
+        <input type="number" id="width" value="1920">
+        <label for="height">Height:</label>
+        <input type="number" id="height" value="1080">
+        <div class="output" id="ratioOutput">Ratio: 16:9</div>
+        <label for="scale">Scale:</label>
+        <input type="range" id="scale" min="50" max="200" value="100">
+        <div class="output">
+            <div id="scaledWidth">Scaled Width: 1920</div>
+            <div id="scaledHeight">Scaled Height: 1080</div>
+        </div>
+    </div>
+
+    <script>
+        const widthInput = document.getElementById('width');
+        const heightInput = document.getElementById('height');
+        const ratioOutput = document.getElementById('ratioOutput');
+        const scaleInput = document.getElementById('scale');
+        const scaledWidthOutput = document.getElementById('scaledWidth');
+        const scaledHeightOutput = document.getElementById('scaledHeight');
+
+        function calculateRatio(width, height) {
+            function gcd(a, b) {
+                return b == 0 ? a : gcd(b, a % b);
+            }
+
+            const divisor = gcd(width, height);
+            return `${width / divisor}:${height / divisor}`;
+        }
+
+        function updateOutputs() {
+            const width = parseInt(widthInput.value);
+            const height = parseInt(heightInput.value);
+            const ratio = calculateRatio(width, height);
+            ratioOutput.textContent = `Ratio: ${ratio}`;
+
+            const scale = scaleInput.value / 100;
+            const scaledWidth = Math.round(width * scale);
+            const scaledHeight = Math.round(height * scale);
+            scaledWidthOutput.textContent = `Scaled Width: ${scaledWidth}`;
+            scaledHeightOutput.textContent = `Scaled Height: ${scaledHeight}`;
+        }
+
+        widthInput.addEventListener('input', updateOutputs);
+        heightInput.addEventListener('input', updateOutputs);
+        scaleInput.addEventListener('input', updateOutputs);
+
+        updateOutputs();
+    </script>
+</body>
+
+</html>
